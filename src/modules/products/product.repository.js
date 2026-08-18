@@ -1,22 +1,28 @@
-        import prisma from "../../config/prisma.js";
+import prisma from "../../config/prisma.js";
 
-        export const findAll = async (filters = {}) => {
+export const findAll = async (filters = {}) => {
 
-            const {
-                search,
-                brand,
-                category,
-                featured,
-                active,
-                minPrice,
-                maxPrice,
-                page = 1,
-                limit = 12,
-                sort = "newest"
-            } = filters;
+    const {
+        search,
+        brand,
+        category,
+        quality,
+        featured,
+        active,
+        minPrice,
+        maxPrice,
+        page = 1,
+        limit = 12,
+        sort = "newest"
+    } = filters;
 
-            const where = {};
-            if (search) {
+    const where = {};
+
+    if (quality) {
+        where.quality = quality;
+    }
+
+    if (search) {
 
         const searchText = search.trim();
 
@@ -61,65 +67,65 @@
         ];
     }
 
-            if (brand) {
-                where.brand = {
-                    slug: brand
-                };
-            }
+    if (brand) {
+        where.brand = {
+            slug: brand
+        };
+    }
 
-            if (category) {
-                where.category = {
-                    slug: category
-                };
-            }
+    if (category) {
+        where.category = {
+            slug: category
+        };
+    }
 
-            if (featured !== undefined) {
-                where.featured = featured === "true";
-            }
+    if (featured !== undefined) {
+        where.featured = featured === "true";
+    }
 
-            if (active !== undefined) {
-                where.active = active === "true";
-            }
+    if (active !== undefined) {
+        where.active = active === "true";
+    }
 
-            if (minPrice || maxPrice) {
+    if (minPrice || maxPrice) {
 
-                where.price = {};
+        where.price = {};
 
-                if (minPrice) {
-                    where.price.gte = Number(minPrice);
-                }
+        if (minPrice) {
+            where.price.gte = Number(minPrice);
+        }
 
-                if (maxPrice) {
-                    where.price.lte = Number(maxPrice);
-                }
+        if (maxPrice) {
+            where.price.lte = Number(maxPrice);
+        }
 
-            }
+    }
 
-            let orderBy = {
-                createdAt: "desc"
+    let orderBy = {
+        createdAt: "desc"
+    };
+
+    switch (sort) {
+
+        case "price-asc":
+            orderBy = {
+                price: "asc"
             };
+            break;
 
-            switch (sort) {
+        case "price-desc":
+            orderBy = {
+                price: "desc"
+            };
+            break;
 
-                case "price-asc":
-                    orderBy = {
-                        price: "asc"
-                    };
-                    break;
+        case "name":
+            orderBy = {
+                name: "asc"
+            };
+            break;
 
-                case "price-desc":
-                    orderBy = {
-                        price: "desc"
-                    };
-                    break;
-
-                case "name":
-                    orderBy = {
-                        name: "asc"
-                    };
-                    break;
-
-            }
+    }
 
 const [products, total] = await Promise.all([
 

@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 enum Role {
   ADMIN
@@ -52,7 +53,11 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
+enum ProductQuality {
+  G5
+  IMPORTADA
+  PREMIUM
+}
 model Product {
   id String @id @default(uuid())
 
@@ -66,6 +71,8 @@ model Product {
   price      Decimal  @db.Decimal(10, 2)
   offerPrice Decimal? @db.Decimal(10, 2)
 
+  quality ProductQuality
+
   featured Boolean @default(false)
   active   Boolean @default(true)
 
@@ -76,19 +83,17 @@ model Product {
   category Category @relation(fields: [categoryId], references: [id])
 
   productSizes ProductSize[]
-
-  orderItems OrderItem[]
-
-  images ProductImage[]
+  orderItems   OrderItem[]
+  images       ProductImage[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([brandId])
   @@index([categoryId])
+  @@index([quality])
   @@index([slug])
 }
-
 model Size {
   id String @id @default(uuid())
 
