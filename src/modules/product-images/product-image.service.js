@@ -11,7 +11,7 @@ class ProductImageService {
         const result = await new Promise((resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream(
                 {
-                    folder: "tnis/products"
+                    folder: "vice/products"
                 },
                 (error, result) => {
                     if (error) return reject(error);
