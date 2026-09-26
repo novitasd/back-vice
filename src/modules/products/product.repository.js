@@ -13,7 +13,7 @@ export const findAll = async (filters = {}) => {
         maxPrice,
         page = 1,
         limit = 12,
-        sort = "newest"
+        sort = "manual"
     } = filters;
 
     const where = {};
@@ -102,30 +102,41 @@ export const findAll = async (filters = {}) => {
     }
 
     let orderBy = {
-        createdAt: "desc"
+        sortOrder: "asc"
     };
 
-    switch (sort) {
+   switch (sort) {
+    case "price-asc":
+        orderBy = {
+            price: "asc"
+        };
+        break;
 
-        case "price-asc":
-            orderBy = {
-                price: "asc"
-            };
-            break;
+    case "price-desc":
+        orderBy = {
+            price: "desc"
+        };
+        break;
 
-        case "price-desc":
-            orderBy = {
-                price: "desc"
-            };
-            break;
+    case "name":
+        orderBy = {
+            name: "asc"
+        };
+        break;
 
-        case "name":
-            orderBy = {
-                name: "asc"
-            };
-            break;
+    case "newest":
+        orderBy = {
+            createdAt: "desc"
+        };
+        break;
 
-    }
+    case "manual":
+    default:
+        orderBy = {
+            sortOrder: "asc"
+        };
+        break;
+}
 
 const [products, total] = await Promise.all([
 

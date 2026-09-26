@@ -76,6 +76,8 @@ model Product {
   featured Boolean @default(false)
   active   Boolean @default(true)
 
+  sortOrder Int @default(0)
+
   brandId    String
   categoryId String
 
@@ -93,6 +95,7 @@ model Product {
   @@index([categoryId])
   @@index([quality])
   @@index([slug])
+  @@index([sortOrder])
 }
 model Size {
   id String @id @default(uuid())
