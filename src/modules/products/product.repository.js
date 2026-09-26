@@ -515,3 +515,20 @@ return {
 
         };
 
+/**
+ * Reordenar productos manualmente.
+ */
+export const reorder = async (products) => {
+    return await prisma.$transaction(
+        products.map((product) =>
+            prisma.product.update({
+                where: {
+                    id: product.id,
+                },
+                data: {
+                    sortOrder: Number(product.sortOrder),
+                },
+            })
+        )
+    );
+};

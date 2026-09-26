@@ -5,6 +5,7 @@ import {
     createProduct,
     updateProduct,
     deleteProduct,
+    reorderProducts as reorderProductsService,
 } from "./product.service.js";
 export async function getProducts(req, res) {
     try {
@@ -101,6 +102,23 @@ export async function destroyProduct(req, res) {
             success: true,
             message: "Producto eliminado correctamente.",
         });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}
+export async function reorderProducts(req, res) {
+    try {
+        const { products } = req.body;
+
+        const result = await reorderProductsService(products);
+
+        res.status(200).json(result);
 
     } catch (error) {
         console.error(error);

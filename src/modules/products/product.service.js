@@ -68,3 +68,10 @@ export const getProductById = async (id) => {
 
     return product;
 };
+
+/**
+ * Reordenar productos manualmente.
+ */
+export const reorderProducts = async (products) => {
+    return await productRepository.reorder(products);
+};
